@@ -1,16 +1,16 @@
 # scTHS-Seq-processing
-Scripts for generating a peaks by cells chromatin accessibility matrix from the scTHS-Seq method. See the following publication (https://www.nature.com/articles/nbt.4038) for a description of the experimental methodology 
+Scripts for generating a peaks by cells chromatin accessibility matrix from the scTHS-Seq method. See the following [publication] (https://www.nature.com/articles/nbt.4038) for a description of the experimental methodology 
 
 ## Required packages
 These scripts require python2.7 and an R version >= 3.4
 
 For the python scripts install:
-* pysam(https://pysam.readthedocs.io/en/latest/) with `pip install pysam --user`
+* [pysam](https://pysam.readthedocs.io/en/latest/) with `pip install pysam --user`
 
 For the R scripts install:
-* devtools(https://cran.r-project.org/web/packages/devtools/index.html) with `install.packages("devtools")`
-* A custom version of the Kharchenko lab spp(https://github.com/hms-dbmi/spp) using `devtools::install_github('yanwu2014/spp', build_vignettes = FALSE)`
-* Bioconductor(http://www.bioconductor.org/install/), if not already installed, using:\
+* [devtools](https://cran.r-project.org/web/packages/devtools/index.html) with `install.packages("devtools")`
+* A custom version of the Kharchenko lab [spp](https://github.com/hms-dbmi/spp) package using `devtools::install_github('yanwu2014/spp', build_vignettes = FALSE)`
+* [Bioconductor](http://www.bioconductor.org/install/), if not already installed, using:\
   `source("https://bioconductor.org/biocLite.R")`\
   `biocLite()`
 * GenomicRanges using: `biocLite("GenomicRanges")`
@@ -19,7 +19,7 @@ For the R scripts install:
 * Human genome with repeats masked using: `biocLite("BSgenome.Hsapiens.UCSC.hg38.masked")`
 * Rsubread using: `biocLite("Rsubread")`
 
-You will also need to generate or download bwa(http://bio-bwa.sourceforge.net/bwa.shtml) indexes for your desired human or mouse reference genome.
+You will also need to generate or download [bwa](http://bio-bwa.sourceforge.net/bwa.shtml) indexes for your desired human or mouse reference genome.
 
 ## Usage
 
@@ -28,7 +28,7 @@ You will also need to generate or download bwa(http://bio-bwa.sourceforge.net/bw
 2. Move `i5_scTHS`, `i7_scTHS`, `r5_scTHS` into working directory. These files contain the i5, i7, and r5 index barcodes and will be used to build the space of all possible barcode combinations.
 
 ### Align and demultiplex cells
-The starting point for this pipeline are un-demultiplexed fastq files, including a read1, index1, and index2 fastq files. If you are starting from basecalls (bcl files), you can generate un-demultiplexed fastq files using Illumina's bcl2fastq(https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html) without a sample sheet using the command: `bcl2fastq -o [output_directory] --use-bases-mask y50,i8,i32 --create-fastq-for-index-reads 2`
+The starting point for this pipeline are un-demultiplexed fastq files, including a read1, index1, and index2 fastq files. If you are starting from basecalls (bcl files), you can generate un-demultiplexed fastq files using Illumina's [bcl2fastq](https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html) without a sample sheet using the command: `bcl2fastq -o [output_directory] --use-bases-mask y50,i8,i32 --create-fastq-for-index-reads 2`
 
 The `align_demultiplex.py` script will take in as input un-demultiplexed fastqs and generate a directory of demultiplexed bam files, one for each potential cell, with PCR duplicate reads removed. The usage is:\
 `python align_demultiplex.py [read1_fastq]_R1.fastq.gz [index1_fastq]_I1.fastq.gz [index2_fastq]_I2.fastq.gz [sample_prefix] [bwa_index_path] [n_cores]`
