@@ -1,5 +1,5 @@
 # scTHS-Seq-processing
-Scripts for generating a peaks by cells chromatin accessibility matrix from the scTHS-Seq method. See the following [publication] (https://www.nature.com/articles/nbt.4038) for a description of the experimental methodology 
+Scripts for generating a peaks by cells chromatin accessibility matrix from the scTHS-Seq method. See the following [publication](https://www.nature.com/articles/nbt.4038) for a description of the experimental methodology 
 
 ## Required packages
 These scripts require python2.7 and an R version >= 3.4
