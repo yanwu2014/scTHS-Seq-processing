@@ -15,6 +15,9 @@
 require(spp)
 require(parallel)
 require(methods)
+require(GenomicRanges)
+require(IRanges)
+library(BSgenome.Hsapiens.UCSC.hg38.masked)
 
 #### Load helper functions
 
@@ -26,8 +29,6 @@ require(methods)
 #' @returns GRanges version
 #'
 range2GRanges <- function(df) {
-  require(GenomicRanges)
-  require(IRanges)
   gr <- GenomicRanges::GRanges(
     seqnames = df[,1],
     ranges=IRanges(start = df[,2], end = df[,3])
@@ -37,8 +38,6 @@ range2GRanges <- function(df) {
 
 
 pos2GRanges <- function(chr, pos) {
-  require(GenomicRanges)
-  require(IRanges)
   gr <- GenomicRanges::GRanges(seqnames = chr, ranges = IRanges(start = pos, width = 1))
   return(gr)
 }
@@ -62,7 +61,7 @@ bamfiles <- unlist(lapply(input.dirs, function(input.path) {
   input.path <- gsub("/", "", input.path)
   print(input.path)
   
-  bamfiles <- list.files(input.path, pattern = ".unique*bam$")
+  bamfiles <- list.files(input.path, pattern = ".unique.*bam$")
   names(bamfiles) <- gsub(".bam", "", bamfiles)
   print(paste0("Total number of files: ", length(bamfiles)))
   
@@ -109,7 +108,6 @@ pdata <- mclapply(pdata, function(d) {
 }, mc.cores = n.cores)
 
 #### Remove reads in masked regions if necessary
-library(BSgenome.Hsapiens.UCSC.hg38.masked)
 genome <- BSgenome.Hsapiens.UCSC.hg38.masked
 
 rl <- 100
@@ -229,6 +227,7 @@ write.table(bed.df, file = paste0(output.prefix, "_peaks_spp", ".bed"),
             quote = F, sep = "\t", row.names = F, col.names = F)
 
 ## write out gtf file
+peak.names <- paste(bed.df$seqnames, bed.df$starts, bed.df$ends, sep = "_")
 gtf.df <- data.frame(chr = seqnames(gr), 
                      source = rep("spp", length(gr)),
                      feature = rep("peak", length(gr)),
@@ -237,7 +236,7 @@ gtf.df <- data.frame(chr = seqnames(gr),
                      scores = rep(".", length(gr)),
                      strands = rep("+", length(gr)),
                      frames = rep(".", length(gr)),
-                     attr = paste0('peak_id \"', names(peaks.spp), '\";'))
+                     attr = paste0('peak_id \"', peak.names, '\";'))
 
 write.table(gtf.df, file = paste0(output.prefix, "_peaks_spp", ".gtf"), 
             quote = F, sep = "\t", row.names = F, col.names = F)

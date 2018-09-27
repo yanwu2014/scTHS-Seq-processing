@@ -230,6 +230,7 @@ write.table(bed.df, file = paste0(output.prefix, "_peaks_spp", ".bed"),
             quote = F, sep = "\t", row.names = F, col.names = F)
 
 ## write out gtf file
+peak.names <- paste(bed.df$seqnames, bed.df$starts, bed.df$ends, sep = "_")
 gtf.df <- data.frame(chr = seqnames(gr), 
                      source = rep("spp", length(gr)),
                      feature = rep("peak", length(gr)),
@@ -238,7 +239,7 @@ gtf.df <- data.frame(chr = seqnames(gr),
                      scores = rep(".", length(gr)),
                      strands = rep("+", length(gr)),
                      frames = rep(".", length(gr)),
-                     attr = paste0('peak_id \"', names(peaks.spp), '\";'))
+                     attr = paste0('peak_id \"', peak.names, '\";'))
 
 write.table(gtf.df, file = paste0(output.prefix, "_peaks_spp", ".gtf"), 
             quote = F, sep = "\t", row.names = F, col.names = F)
