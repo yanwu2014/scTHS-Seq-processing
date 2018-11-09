@@ -84,10 +84,10 @@ bamfiles <- unlist(lapply(input.dirs, function(input.path) {
   ## Only use files with more than the minimum number of reads
   bamfiles.use <- paste(input.path, names(which(log10(reads + 1) > log10(min.reads))), sep = "/")
   print(paste0("Total number of files: ", length(bamfiles.use)))
-  write(bamfiles.use, file = paste0(input.path, ".bamfiles.pass_filter.txt"), sep = "\n")
   
   bamfiles.use
 }))
+write(bamfiles, file = paste0(output.prefix, ".bamfiles.pass_filter.txt"), sep = "\n")
 
 ## Pool reads
 bamdata <- mclapply(bamfiles, function(fname) {
