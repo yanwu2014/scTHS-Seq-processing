@@ -44,7 +44,7 @@ pos2GRanges <- function(chr, pos) {
 
 
 ## Establish valid chromosmes
-chrl <- paste0("chr", c(1:21, "X"))
+chrl <- paste0("chr", c(1:22, "X"))
 names(chrl) <- chrl
 
 #### Pooling data
