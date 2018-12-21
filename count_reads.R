@@ -13,7 +13,7 @@ n.cores <- as.integer(options[[4]])
 start.time <- proc.time()
 
 ## Count reads in peaks
-max.files <- 5000
+max.files <- 4000
 bamfiles.all <- scan(bamfiles.list, what = character(), sep = "\n")
 bamfiles.list <- split(bamfiles.all, ceiling(seq_along(bamfiles.all)/max.files))
 
@@ -26,7 +26,7 @@ counts.list <- lapply(bamfiles.list, function(bamfiles) {
   
   ## Pull out metadata
   stats <- res$stat; rownames(stats) <- stats$Status; stats$Status <- NULL; stats <- as.matrix(stats);
-  frac.in.peaks <- stats["Assigned",]/stats["Unassigned_NoFeatures",]
+  frac.in.peaks <- stats["Assigned",]/(stats["Unassigned_NoFeatures",] + stats["Assigned",])
   
   ## Return counts matrix with metadata row
   as(rbind(frac.in.peaks, res$counts), "dgCMatrix")
